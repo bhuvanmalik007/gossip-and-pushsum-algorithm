@@ -20,11 +20,8 @@ defmodule GossipTopologies do
       range = 1..numNodes
       neighboursList = Enum.to_list(range)
        neighboursList = List.delete(neighboursList,i)
-        # IO.puts "neighboursList: #{inspect(neighboursList)}"
         spawn(fn -> GossipGenServer.start_link(i, neighboursList) end)
     end
-    # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
-    # Process.sleep(200)
     HelperFunctions.convergeTopology(numNodes, "gossip")
   end
 
@@ -39,8 +36,6 @@ defmodule GossipTopologies do
       IO.puts("\nneighbours of #{inspect(i)} are #{inspect(neighboursList)}")
       spawn(fn -> GossipGenServer.start_link(i, neighboursList) end)
     end
-  # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
-      # Process.sleep(200)
       HelperFunctions.convergeTopology(numNodes, "gossip")
   end
 
@@ -61,9 +56,6 @@ defmodule GossipTopologies do
                       end
         spawn(fn -> GossipGenServer.start_link(i, neighboursList) end)
     end
-
-    # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
-    # Process.sleep(200)
     HelperFunctions.convergeTopology(numNodes, "gossip")
   end
 
@@ -73,7 +65,6 @@ defmodule GossipTopologies do
       xC = Enum.random(1..numNodes)/numNodes
       yC = Enum.random(1..numNodes)/numNodes
       acc ++ Keyword.put_new([], :"#{inspect(nodeNo)}", %{x: xC, y: yC})
-        # [Map.put(%{}, nodeNo, [x,y])]
       end)
     IO.puts "coordinatesStore: #{inspect(coordinatesStore)}"
 
@@ -81,7 +72,6 @@ defmodule GossipTopologies do
       parentCoordinatesMap = Keyword.get(coordinatesStore, :"#{inspect(i)}")
       parentX = Map.get(parentCoordinatesMap, :x)
       parentY = Map.get(parentCoordinatesMap, :y)
-      # IO.puts "parentCoordinatesMap: #{inspect(parentCoordinatesMap)}"
 
       neighboursList =
         Enum.reduce(1..numNodes, [], fn i, acc ->
@@ -90,13 +80,9 @@ defmodule GossipTopologies do
           y = Map.get(coordinatesMap, :y)
           distance = :math.sqrt(((parentX - x)*(parentX - x)) + ((parentY - y)*(parentY - y)))
           acc ++ (((distance >= 0 && distance <= 0.1) && [i]) || [])
-          # IO.puts "x: #{inspect(x)}"
           end)
-      #IO.puts "neighboursList of #{inspect(i)}: #{inspect(neighboursList)}"
       spawn(fn -> GossipGenServer.start_link(i, neighboursList) end)
     end
-  # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
-  # Process.sleep(200)
     HelperFunctions.convergeTopology(numNodes, "gossip")
   end
 
@@ -141,8 +127,6 @@ defmodule GossipTopologies do
                         end
         spawn(fn -> GossipGenServer.start_link(i, neighboursList) end)
         end
-    # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
-    # Process.sleep(200)
     HelperFunctions.convergeTopology(numNodes, "gossip")
   end
 

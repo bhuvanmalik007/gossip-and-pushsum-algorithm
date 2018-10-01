@@ -6,7 +6,6 @@ defmodule PushSumGenServer do
   end
 
   def pidRetriever(nodeNo) do
-    # IO.puts "trying"
     case Registry.lookup(:node_store, nodeNo) do
     [{pid, _}] -> pid
     [] -> nil
@@ -17,7 +16,6 @@ defmodule PushSumGenServer do
     # IO.puts("\nnodeNo: #{inspect(nodeNo)}   neighboursList:  #{inspect(neighboursList)}")
     receive do
       {_, s, w} ->
-        # IO.puts("\nrumorMessageinit: #{inspect(rumorMessage)}")
         rumoringProcess = Task.start fn -> spreadGossip(neighboursList,s + nodeNo, w + 1, nodeNo) end
         PushSumGenServer.node(1, s + nodeNo, w + 1, rumoringProcess, nodeNo, nodeNo)
     end
@@ -54,17 +52,13 @@ defmodule PushSumGenServer do
                   {:updatedGossip, newS, newW} -> {newS, newW}
               end
               indexToPing = Enum.random(neighboursList)
-            #  IO.puts("\nnodeNo: #{inspect(nodeNo)}   indexToPing:  #{inspect(indexToPing)}")
               neighbour_id = PushSumGenServer.pidRetriever(indexToPing)
           if neighbour_id != nil do
               send(neighbour_id,{:transrumor,s,w})
-            #  IO.puts("\nnodeNo: #{inspect(nodeNo)} sent message")
           end
-          # IO.puts("\nnodeNo: #{inspect(nodeNo)}   about to recurse")
           spreadGossip(neighboursList, s, w, nodeNo)
     rescue
       _ ->
-        # IO.puts("\nnodeNo: #{inspect(nodeNo)}  rescued here")
         spreadGossip(neighboursList, s, w, nodeNo)
   end
 end

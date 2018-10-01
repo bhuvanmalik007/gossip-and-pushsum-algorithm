@@ -7,14 +7,10 @@ defmodule PushSumTopologies do
         i == numNodes -> [i - 1]
         true -> [i - 1, i + 1]
       end
-      # IO.puts("\nnodeNo: #{inspect(i)}   neighboursList:  #{inspect(neighboursList)}")
       pid = spawn(fn -> PushSumGenServer.start_link(i, neighboursList) end)
       Process.monitor(pid)
-      # IO.puts("\nnodeNo: #{inspect(i)}   pid:  #{inspect(pid)}")
 
   end
-  # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
-  # Process.sleep(200)
   HelperFunctions.convergeTopology(numNodes, "pushsum")
 end
 
@@ -23,11 +19,8 @@ end
       range = 1..numNodes
       neighboursList = Enum.to_list(range)
       neighboursList = List.delete(neighboursList,i)
-        # IO.puts "neighboursList: #{inspect(neighboursList)}"
         spawn(fn -> PushSumGenServer.start_link(i, neighboursList) end)
     end
-    # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
-    # Process.sleep(200)
     HelperFunctions.convergeTopology(numNodes, "pushsum")
   end
 
@@ -39,17 +32,14 @@ end
                               i == numNodes -> [i-1] ++ [Enum.random(Enum.filter(randomList, fn x -> x != i and x != (i-1) end))]
                               true -> [i-1,i+1] ++ [Enum.random(Enum.filter(randomList, fn x -> x != i and x != (i-1) and x != (i+1) end))]
       end
-      IO.puts("\nneighbours of #{inspect(i)} are #{inspect(neighboursList)}")
+      # IO.puts("\nneighbours of #{inspect(i)} are #{inspect(neighboursList)}")
       spawn(fn -> PushSumGenServer.start_link(i, neighboursList) end)
     end
-    # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
-    # Process.sleep(200)
     HelperFunctions.convergeTopology(numNodes, "pushsum")
   end
 
   def pushSumTorus(numNodes) do
     rc = round(:math.sqrt(numNodes))
-    IO.puts "rc: #{inspect(rc)}"
     for i <- 1..numNodes do
       neighboursList =  cond do
                           i == 1 -> [i+1,i+rc,i+rc-1,i+(rc*rc)-rc]
@@ -64,8 +54,6 @@ end
                       end
         spawn(fn -> PushSumGenServer.start_link(i, neighboursList) end)
     end
-    # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
-    # Process.sleep(200)
     HelperFunctions.convergeTopology(numNodes, "pushsum")
   end
 
@@ -75,15 +63,12 @@ end
       xC = Enum.random(1..numNodes)/numNodes
       yC = Enum.random(1..numNodes)/numNodes
       acc ++ Keyword.put_new([], :"#{inspect(nodeNo)}", %{x: xC, y: yC})
-        # [Map.put(%{}, nodeNo, [x,y])]
       end)
-    # IO.puts "coordinatesStore: #{inspect(coordinatesStore)}"
 
     for i <- 1..numNodes do
       parentCoordinatesMap = Keyword.get(coordinatesStore, :"#{inspect(i)}")
       parentX = Map.get(parentCoordinatesMap, :x)
       parentY = Map.get(parentCoordinatesMap, :y)
-      # IO.puts "parentCoordinatesMap: #{inspect(parentCoordinatesMap)}"
 
       neighboursList =
         Enum.reduce(1..numNodes, [], fn i, acc ->
@@ -92,19 +77,14 @@ end
           y = Map.get(coordinatesMap, :y)
           distance = :math.sqrt(((parentX - x)*(parentX - x)) + ((parentY - y)*(parentY - y)))
           acc ++ (((distance >= 0 && distance <= 0.1) && [i]) || [])
-          # IO.puts "x: #{inspect(x)}"
           end)
-      #IO.puts "neighboursList of #{inspect(i)}: #{inspect(neighboursList)}"
       spawn(fn -> PushSumGenServer.start_link(i, neighboursList) end)
     end
-    # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
-    # Process.sleep(200)
     HelperFunctions.convergeTopology(numNodes, "pushsum")
   end
 
   def pushSumThreeD(numNodes) do
     rc = round(HelperFunctions.nthRoot(3, numNodes, 1))
-    IO.puts "rc: #{inspect(rc)}"
     for i <- 1..numNodes do
         neighboursList =  cond do
                         #First layer
@@ -142,8 +122,6 @@ end
                         end
         spawn(fn -> PushSumGenServer.start_link(i, neighboursList) end)
         end
-    # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
-    # Process.sleep(200)
     HelperFunctions.convergeTopology(numNodes, "pushsum")
   end
 

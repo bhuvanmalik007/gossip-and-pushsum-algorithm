@@ -33,9 +33,9 @@ defmodule GossipGenServer do
         end
       else
         # IO.puts("\nthis got killed: #{inspect(Task.shutdown(nodePid, :brutal_kill))}")
-        # Task.shutdown(nodePid, 100) || Task.shutdown(nodePid)
         send(:global.whereis_name(:mainproc),{:converged, nodeNo})
-        Process.exit(nodePid, :kill)
+        Task.shutdown(nodePid, :brutal_kill)
+        # Process.exit(nodePid, :kill)
         IO.puts("*******************************#{inspect(nodeNo)}th process killed successfully*******************************")
         # IO.puts("\nthis got killed: #{inspect(Task.shutdown(rumoringProcess, :brutal_kill))}")
         # IO.puts("\nTask: #{inspect(Task.shutdown)}")

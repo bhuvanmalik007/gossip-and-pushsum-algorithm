@@ -1,10 +1,10 @@
-defmodule GossipAlgorithm do
+defmodule GossipAlgorithm.CLI do
   def main(args) do
     args |> parse_args |> carryOn
   end
 
   defp parse_args(args) do
-    {_,parameters,_} = OptionParser.parse(args)
+    {_,parameters,_} = OptionParser.parse(args, switches: [help: :boolean])
     parameters
   end
 
@@ -16,13 +16,16 @@ defmodule GossipAlgorithm do
     numNodes = String.to_integer(Enum.at(parameters,0))
     topology = Enum.at(parameters,1)
     algorithm = Enum.at(parameters,2)
+    IO.puts("#{numNodes}")
     Registry.start_link(keys: :unique, name: :node_store)
     case topology do
-      "full" -> if algorithm == "gossip", do: GossipSimulator.Implementation.gossip_full(numNodes,trigger_node_count,nodes_to_ping,stopping_threshold), else: GossipSimulator.Implementation.pushsum_full(numNodes,trigger_node_count,nodes_to_ping,stopping_threshold)
-      "2d" -> if algorithm == "gossip", do: GossipSimulator.Implementation.gossip_2d(numNodes,trigger_node_count,nodes_to_ping,stopping_threshold), else: GossipSimulator.Implementation.pushsum_2d(numNodes,trigger_node_count,nodes_to_ping,stopping_threshold)
-      "line" -> if algorithm == "gossip", do: GossipSimulator.Implementation.gossip_line(numNodes,trigger_node_count,nodes_to_ping,stopping_threshold), else: GossipSimulator.Implementation.pushsum_line(numNodes,trigger_node_count,nodes_to_ping,stopping_threshold)
-      "imp2d" -> if algorithm == "gossip", do: GossipSimulator.Implementation.gossip_imp2d(numNodes,trigger_node_count,nodes_to_ping,stopping_threshold), else: GossipSimulator.Implementation.pushsum_imp2d(numNodes,trigger_node_count,nodes_to_ping,stopping_threshold)
-      _ -> IO.puts "Default"
+      "line" -> if algorithm == "gossip", do: Topologies.line(numNodes), else: Topologies.pushSumLine(numNodes)
+      "full" -> if algorithm == "gossip", do: Topologies.full(numNodes), else: Topologies.pushSumFull(numNodes)
+      "impline" -> if algorithm == "gossip", do: Topologies.impLine(numNodes), else: Topologies.pushSumImpLine(numNodes)
+      "torus" -> if algorithm == "gossip", do: Topologies.torus(numNodes), else: Topologies.pushSumTorus(numNodes)
+      "rand2D" -> if algorithm == "gossip", do: Topologies.random2D(numNodes), else: Topologies.pushSumRandom2D(numNodes)
+      "3D" -> if algorithm == "gossip", do: Topologies.threeD(numNodes), else: Topologies.pushSumThreeD(numNodes)
+      _ -> IO.puts "No matches found for the given arguments."
     end
   end
 end

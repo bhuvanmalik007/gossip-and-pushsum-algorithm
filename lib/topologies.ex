@@ -380,22 +380,6 @@ end
     IO.puts "Time taken to achieve convergence: #{time_diff} milliseconds"
   end
 
-  def s() do
-    Registry.start_link(keys: :unique, name: :node_store)
-    # spawn(Topologies, :line, [10])
-    # spawn(Topologies, :full, [10000])
-    # spawn(Topologies, :impLine, [10])
-    # spawn(Topologies, :torus, [100])
-    # spawn(Topologies, :random2D, [150])
-    # spawn(Topologies, :threeD, [100])
-    # spawn(Topologies, :pushSumLine, [5])
-    # spawn(Topologies, :pushSumFull, [850])
-    # spawn(Topologies, :pushSumImpLine, [200])
-    # spawn(Topologies, :pushSumTorus, [100])
-    # spawn(Topologies, :pushSumRandom2D, [100])
-    # spawn(Topologies, :pushSumThreeD, [100])
-  end
-
   def converging(numNodes) do
     IO.puts "#{inspect(numNodes)} remaining"
     if(numNodes > 0) do

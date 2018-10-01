@@ -15,14 +15,7 @@ defmodule PushSumTopologies do
   end
   # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
   # Process.sleep(200)
-  convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
-      :global.register_name(:mainproc,convergence_task.pid)
-      start_time = System.system_time(:millisecond)
-      rand_pid = PushSumGenServer.pidRetriever(Enum.random(1..numNodes))
-      send(rand_pid,{:mainproc, 0, 0})
-      Task.await(convergence_task, :infinity)
-      time_diff = System.system_time(:millisecond) - start_time
-      IO.puts "Time taken to achieve convergence: #{time_diff} milliseconds"
+  HelperFunctions.convergeTopology(numNodes, "pushsum")
 end
 
   def pushSumFull(numNodes) do
@@ -35,14 +28,7 @@ end
     end
     # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
     # Process.sleep(200)
-    convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
-    :global.register_name(:mainproc,convergence_task.pid)
-    start_time = System.system_time(:millisecond)
-    rand_pid = PushSumGenServer.pidRetriever(Enum.random(1..numNodes))
-    send(rand_pid,{:mainproc, 0, 0})
-    Task.await(convergence_task, :infinity)
-    time_diff = System.system_time(:millisecond) - start_time
-    IO.puts "Time taken to achieve convergence: #{time_diff} milliseconds"
+    HelperFunctions.convergeTopology(numNodes, "pushsum")
   end
 
   def pushSumImpLine(numNodes) do
@@ -58,14 +44,7 @@ end
     end
     # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
     # Process.sleep(200)
-    convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
-    :global.register_name(:mainproc,convergence_task.pid)
-    start_time = System.system_time(:millisecond)
-    rand_pid = PushSumGenServer.pidRetriever(Enum.random(1..numNodes))
-    send(rand_pid,{:mainproc, 0, 0})
-    Task.await(convergence_task, :infinity)
-    time_diff = System.system_time(:millisecond) - start_time
-    IO.puts "Time taken to achieve convergence: #{time_diff} milliseconds"
+    HelperFunctions.convergeTopology(numNodes, "pushsum")
   end
 
   def pushSumTorus(numNodes) do
@@ -87,14 +66,7 @@ end
     end
     # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
     # Process.sleep(200)
-    convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
-    :global.register_name(:mainproc,convergence_task.pid)
-    start_time = System.system_time(:millisecond)
-    rand_pid = PushSumGenServer.pidRetriever(Enum.random(1..numNodes))
-    send(rand_pid,{:mainproc, 0, 0})
-    Task.await(convergence_task, :infinity)
-    time_diff = System.system_time(:millisecond) - start_time
-    IO.puts "Time taken to achieve convergence: #{time_diff} milliseconds"
+    HelperFunctions.convergeTopology(numNodes, "pushsum")
   end
 
   def pushSumRandom2D(numNodes) do
@@ -127,14 +99,7 @@ end
     end
     # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
     # Process.sleep(200)
-    convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
-    :global.register_name(:mainproc,convergence_task.pid)
-    start_time = System.system_time(:millisecond)
-    rand_pid = PushSumGenServer.pidRetriever(Enum.random(1..numNodes))
-    send(rand_pid,{:mainproc, 0, 0})
-    Task.await(convergence_task, :infinity)
-    time_diff = System.system_time(:millisecond) - start_time
-    IO.puts "Time taken to achieve convergence: #{time_diff} milliseconds"
+    HelperFunctions.convergeTopology(numNodes, "pushsum")
   end
 
   def pushSumThreeD(numNodes) do
@@ -179,14 +144,7 @@ end
         end
     # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
     # Process.sleep(200)
-    convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
-    :global.register_name(:mainproc,convergence_task.pid)
-    start_time = System.system_time(:millisecond)
-    rand_pid = PushSumGenServer.pidRetriever(Enum.random(1..numNodes))
-    send(rand_pid,{:mainproc, 0, 0})
-    Task.await(convergence_task, :infinity)
-    time_diff = System.system_time(:millisecond) - start_time
-    IO.puts "Time taken to achieve convergence: #{time_diff} milliseconds"
+    HelperFunctions.convergeTopology(numNodes, "pushsum")
   end
 
 end

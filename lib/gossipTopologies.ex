@@ -12,16 +12,7 @@ defmodule GossipTopologies do
         # IO.puts "neighboursList: #{inspect(neighboursList)}"
         spawn(fn -> GossipGenServer.start_link(i, neighboursList) end)
     end
-    # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
-    # Process.sleep(200)
-    convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
-        :global.register_name(:mainproc,convergence_task.pid)
-        start_time = System.system_time(:millisecond)
-        rand_pid = GossipGenServer.pidRetriever(Enum.random(1..numNodes))
-        send(rand_pid,{:mainproc,"It's alive, it's alive, Carter V"})
-        Task.await(convergence_task, :infinity)
-        time_diff = System.system_time(:millisecond) - start_time
-        IO.puts "Time taken to achieve convergence: #{time_diff} milliseconds"
+    HelperFunctions.convergeTopology(numNodes, "gossip")
   end
 
   def full(numNodes) do
@@ -34,14 +25,7 @@ defmodule GossipTopologies do
     end
     # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
     # Process.sleep(200)
-    convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
-        :global.register_name(:mainproc,convergence_task.pid)
-        start_time = System.system_time(:millisecond)
-        rand_pid = GossipGenServer.pidRetriever(Enum.random(1..numNodes))
-        send(rand_pid,{:mainproc,"It's alive, it's alive, Carter V"})
-        Task.await(convergence_task, :infinity)
-        time_diff = System.system_time(:millisecond) - start_time
-        IO.puts "Time taken to achieve convergence: #{time_diff} milliseconds"
+    HelperFunctions.convergeTopology(numNodes, "gossip")
   end
 
   def impLine(numNodes) do
@@ -57,14 +41,7 @@ defmodule GossipTopologies do
     end
   # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
       # Process.sleep(200)
-      convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
-          :global.register_name(:mainproc,convergence_task.pid)
-          start_time = System.system_time(:millisecond)
-          rand_pid = GossipGenServer.pidRetriever(Enum.random(1..numNodes))
-          send(rand_pid,{:mainproc,"It's alive, it's alive, Carter V"})
-          Task.await(convergence_task, :infinity)
-          time_diff = System.system_time(:millisecond) - start_time
-          IO.puts "Time taken to achieve convergence: #{time_diff} milliseconds"
+      HelperFunctions.convergeTopology(numNodes, "gossip")
   end
 
   def torus(numNodes) do
@@ -87,14 +64,7 @@ defmodule GossipTopologies do
 
     # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
     # Process.sleep(200)
-    convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
-        :global.register_name(:mainproc,convergence_task.pid)
-        start_time = System.system_time(:millisecond)
-        rand_pid = GossipGenServer.pidRetriever(Enum.random(1..numNodes))
-        send(rand_pid,{:mainproc,"It's alive, it's alive, Carter V"})
-        Task.await(convergence_task, :infinity)
-        time_diff = System.system_time(:millisecond) - start_time
-        IO.puts "Time taken to achieve convergence: #{time_diff} milliseconds"
+    HelperFunctions.convergeTopology(numNodes, "gossip")
   end
 
   def random2D(numNodes) do
@@ -125,17 +95,10 @@ defmodule GossipTopologies do
       #IO.puts "neighboursList of #{inspect(i)}: #{inspect(neighboursList)}"
       spawn(fn -> GossipGenServer.start_link(i, neighboursList) end)
     end
-# IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
-# Process.sleep(200)
-convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
-    :global.register_name(:mainproc,convergence_task.pid)
-    start_time = System.system_time(:millisecond)
-    rand_pid = GossipGenServer.pidRetriever(Enum.random(1..numNodes))
-    send(rand_pid,{:mainproc,"It's alive, it's alive, Carter V"})
-    Task.await(convergence_task, :infinity)
-    time_diff = System.system_time(:millisecond) - start_time
-    IO.puts "Time taken to achieve convergence: #{time_diff} milliseconds"
-end
+  # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
+  # Process.sleep(200)
+    HelperFunctions.convergeTopology(numNodes, "gossip")
+  end
 
 
   def threeD(numNodes) do
@@ -180,14 +143,7 @@ end
         end
     # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
     # Process.sleep(200)
-    convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
-        :global.register_name(:mainproc,convergence_task.pid)
-        start_time = System.system_time(:millisecond)
-        rand_pid = GossipGenServer.pidRetriever(Enum.random(1..numNodes))
-        send(rand_pid,{:mainproc,"It's alive, it's alive, Carter V"})
-        Task.await(convergence_task, :infinity)
-        time_diff = System.system_time(:millisecond) - start_time
-        IO.puts "Time taken to achieve convergence: #{time_diff} milliseconds"
+    HelperFunctions.convergeTopology(numNodes, "gossip")
   end
 
 end

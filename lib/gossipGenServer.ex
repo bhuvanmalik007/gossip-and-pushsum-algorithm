@@ -6,7 +6,6 @@ defmodule GossipGenServer do
   end
 
   def pidRetriever(nodeNo) do
-    # IO.puts "trying"
     case Registry.lookup(:node_store, nodeNo) do
     [{pid, _}] -> pid
     [] -> nil

@@ -1,6 +1,5 @@
-defmodule NodeGenServer do
+defmodule GossipGenServer do
   use GenServer
-  # use Task
 
   def start_link(nodeNo, neighboursList) do
     GenServer.start_link(__MODULE__, [nodeNo, neighboursList], name: {:via, Registry, {:node_store, nodeNo}})
@@ -20,7 +19,7 @@ defmodule NodeGenServer do
       {_,rumorMessage} ->
         # IO.puts("\nrumorMessageinit: #{inspect(rumorMessage)}")
         rumoringProcess = Task.start fn -> spreadGossip(neighboursList,rumorMessage, nodeNo) end
-        NodeGenServer.node(1,rumorMessage,rumoringProcess, nodeNo)
+        GossipGenServer.node(1,rumorMessage,rumoringProcess, nodeNo)
     end
     {:ok, nodeNo}
   end
@@ -35,7 +34,7 @@ defmodule NodeGenServer do
       else
         # IO.puts("\nthis got killed: #{inspect(Task.shutdown(nodePid, :brutal_kill))}")
         # Task.shutdown(nodePid, 100) || Task.shutdown(nodePid)
-        send(:global.whereis_name(:mainproc),{:converged,self(), nodeNo})
+        send(:global.whereis_name(:mainproc),{:converged, nodeNo})
         Process.exit(nodePid, :kill)
         IO.puts("*******************************#{inspect(nodeNo)}th process killed successfully*******************************")
         # IO.puts("\nthis got killed: #{inspect(Task.shutdown(rumoringProcess, :brutal_kill))}")
@@ -47,7 +46,7 @@ defmodule NodeGenServer do
     # IO.puts("No #{inspect(nodeNo)} gossip girl at work")
     indexToPing = Enum.random(neighboursList)
     # IO.puts("\nindexToPing: #{inspect(indexToPing)}")
-    neighbour_id = NodeGenServer.pidRetriever(indexToPing)
+    neighbour_id = GossipGenServer.pidRetriever(indexToPing)
     # IO.puts("\nneighbour_id: #{inspect(neighbour_id)}")
     if neighbour_id != nil do
         send(neighbour_id,{:transrumor,rumorMessage})

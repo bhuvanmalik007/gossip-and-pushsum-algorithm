@@ -19,12 +19,12 @@ defmodule GossipAlgorithm.CLI do
     IO.puts("#{numNodes}")
     Registry.start_link(keys: :unique, name: :node_store)
     case topology do
-      "line" -> if algorithm == "gossip", do: Topologies.line(numNodes), else: Topologies.pushSumLine(numNodes)
-      "full" -> if algorithm == "gossip", do: Topologies.full(numNodes), else: Topologies.pushSumFull(numNodes)
-      "impline" -> if algorithm == "gossip", do: Topologies.impLine(numNodes), else: Topologies.pushSumImpLine(numNodes)
-      "torus" -> if algorithm == "gossip", do: Topologies.torus(numNodes), else: Topologies.pushSumTorus(numNodes)
-      "rand2D" -> if algorithm == "gossip", do: Topologies.random2D(numNodes), else: Topologies.pushSumRandom2D(numNodes)
-      "3D" -> if algorithm == "gossip", do: Topologies.threeD(numNodes), else: Topologies.pushSumThreeD(numNodes)
+      "line" -> (algorithm == "gossip" && GossipTopologies.line(numNodes)) || PushSumTopologies.pushSumLine(numNodes)
+      "full" -> (algorithm == "gossip" && GossipTopologies.full(numNodes)) || PushSumTopologies.pushSumFull(numNodes)
+      "impline" -> (algorithm == "gossip" && GossipTopologies.impLine(numNodes)) ||  PushSumTopologies.pushSumImpLine(numNodes)
+      "torus" -> (algorithm == "gossip" && GossipTopologies.torus(numNodes)) || PushSumTopologies.pushSumTorus(numNodes)
+      "rand2D" -> (algorithm == "gossip" && GossipTopologies.random2D(numNodes)) || PushSumTopologies.pushSumRandom2D(numNodes)
+      "3D" -> (algorithm == "gossip" && GossipTopologies.threeD(numNodes)) || PushSumTopologies.pushSumThreeD(numNodes)
       _ -> IO.puts "No matches found for the given arguments."
     end
   end

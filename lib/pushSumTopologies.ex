@@ -15,7 +15,7 @@ defmodule PushSumTopologies do
   end
   # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
   # Process.sleep(200)
-  convergence_task = Task.async(fn -> GossipTopologies.converging(numNodes) end)
+  convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
       :global.register_name(:mainproc,convergence_task.pid)
       start_time = System.system_time(:millisecond)
       rand_pid = PushSumGenServer.pidRetriever(Enum.random(1..numNodes))
@@ -35,7 +35,7 @@ end
     end
     # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
     # Process.sleep(200)
-    convergence_task = Task.async(fn -> GossipTopologies.converging(numNodes) end)
+    convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
     :global.register_name(:mainproc,convergence_task.pid)
     start_time = System.system_time(:millisecond)
     rand_pid = PushSumGenServer.pidRetriever(Enum.random(1..numNodes))
@@ -58,7 +58,7 @@ end
     end
     # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
     # Process.sleep(200)
-    convergence_task = Task.async(fn -> GossipTopologies.converging(numNodes) end)
+    convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
     :global.register_name(:mainproc,convergence_task.pid)
     start_time = System.system_time(:millisecond)
     rand_pid = PushSumGenServer.pidRetriever(Enum.random(1..numNodes))
@@ -87,7 +87,7 @@ end
     end
     # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
     # Process.sleep(200)
-    convergence_task = Task.async(fn -> GossipTopologies.converging(numNodes) end)
+    convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
     :global.register_name(:mainproc,convergence_task.pid)
     start_time = System.system_time(:millisecond)
     rand_pid = PushSumGenServer.pidRetriever(Enum.random(1..numNodes))
@@ -127,7 +127,7 @@ end
     end
     # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
     # Process.sleep(200)
-    convergence_task = Task.async(fn -> GossipTopologies.converging(numNodes) end)
+    convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
     :global.register_name(:mainproc,convergence_task.pid)
     start_time = System.system_time(:millisecond)
     rand_pid = PushSumGenServer.pidRetriever(Enum.random(1..numNodes))
@@ -179,7 +179,7 @@ end
         end
     # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
     # Process.sleep(200)
-    convergence_task = Task.async(fn -> GossipTopologies.converging(numNodes) end)
+    convergence_task = Task.async(fn -> HelperFunctions.converging(numNodes) end)
     :global.register_name(:mainproc,convergence_task.pid)
     start_time = System.system_time(:millisecond)
     rand_pid = PushSumGenServer.pidRetriever(Enum.random(1..numNodes))

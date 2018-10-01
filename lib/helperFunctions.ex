@@ -7,4 +7,20 @@ defmodule HelperFunctions do
   defp fixed_point(_, guess, tolerance, next) when abs(guess - next) < tolerance, do: next
   defp fixed_point(f, _, tolerance, next), do: fixed_point(f, next, tolerance, f.(next))
 
+  def converging(numNodes) do
+    IO.puts "#{inspect(numNodes)} remaining"
+    if(numNodes > 0) do
+      receive do
+          {:converged,nodeNo} ->
+            IO.puts "#{inspect(nodeNo)} Converged"
+            converging(numNodes-1)
+      after
+              5000 -> IO.puts "Convergence could not be reached for #{numNodes} nodes"
+                      # converging(numNodes-1)
+      end
+    else
+      nil
+    end
+  end
+
 end

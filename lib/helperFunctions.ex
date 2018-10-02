@@ -7,6 +7,7 @@ defmodule HelperFunctions do
   defp fixed_point(_, guess, tolerance, next) when abs(guess - next) < tolerance, do: next
   defp fixed_point(f, _, tolerance, next), do: fixed_point(f, next, tolerance, f.(next))
 
+  # Keeps track of all the convirging and remaining nodes and shuts down the entire convergance process if the timeout is reached.
   def converging(numNodes) do
     IO.puts "#{inspect(numNodes)} nodes remaining"
     if(numNodes > 0) do
@@ -16,13 +17,13 @@ defmodule HelperFunctions do
             converging(numNodes-1)
       after
               5000 -> IO.puts "Convergence could not be reached for #{numNodes} nodes"
-                      # converging(numNodes-1)
       end
     else
       nil
     end
   end
 
+  # Starts the async task, timer and gossip and gives the final output.
   def convergeTopology(numNodes, algorithm) do
     asyncTask = Task.async(fn -> HelperFunctions.converging(numNodes) end)
     :global.register_name(:mainproc,asyncTask.pid)

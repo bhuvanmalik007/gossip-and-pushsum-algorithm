@@ -1,6 +1,6 @@
 defmodule GossipAlgorithm.CLI do
   def main(args) do
-    args |> parse_args |> carryOn
+    args |> parse_args |> handler
   end
 
   defp parse_args(args) do
@@ -8,11 +8,11 @@ defmodule GossipAlgorithm.CLI do
     parameters
   end
 
-  def carryOn([]) do
+  def handler([]) do
     IO.puts "No arguments given"
   end
 
-  def carryOn(parameters) do
+  def handler(parameters) do
     numNodes = String.to_integer(Enum.at(parameters,0))
     topology = Enum.at(parameters,1)
     algorithm = Enum.at(parameters,2)

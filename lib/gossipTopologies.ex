@@ -1,5 +1,4 @@
 defmodule GossipTopologies do
-  # use Task
 
   def line(numNodes) do
     for i <- 1..numNodes do
@@ -33,7 +32,7 @@ defmodule GossipTopologies do
                               i == numNodes -> [i-1] ++ [Enum.random(Enum.filter(randomList, fn x -> x != i and x != (i-1) end))]
                               true -> [i-1,i+1] ++ [Enum.random(Enum.filter(randomList, fn x -> x != i and x != (i-1) and x != (i+1) end))]
       end
-      IO.puts("\nneighbours of #{inspect(i)} are #{inspect(neighboursList)}")
+      # IO.puts("\nneighbours of #{inspect(i)} are #{inspect(neighboursList)}")
       spawn(fn -> GossipGenServer.start_link(i, neighboursList) end)
     end
       HelperFunctions.convergeTopology(numNodes, "gossip")
@@ -41,7 +40,6 @@ defmodule GossipTopologies do
 
   def torus(numNodes) do
     rc = round(:math.sqrt(numNodes))
-    IO.puts "rc: #{inspect(rc)}"
     for i <- 1..numNodes do
       neighboursList =  cond do
                           i == 1 -> [i+1,i+rc,i+rc-1,i+(rc*rc)-rc]
@@ -66,7 +64,6 @@ defmodule GossipTopologies do
       yC = Enum.random(1..numNodes)/numNodes
       acc ++ Keyword.put_new([], :"#{inspect(nodeNo)}", %{x: xC, y: yC})
       end)
-    IO.puts "coordinatesStore: #{inspect(coordinatesStore)}"
 
     for i <- 1..numNodes do
       parentCoordinatesMap = Keyword.get(coordinatesStore, :"#{inspect(i)}")
@@ -89,7 +86,6 @@ defmodule GossipTopologies do
 
   def threeD(numNodes) do
     rc = round(HelperFunctions.nthRoot(3, numNodes, 1))
-    IO.puts "rc: #{inspect(rc)}"
     for i <- 1..numNodes do
         neighboursList =  cond do
                         #First layer

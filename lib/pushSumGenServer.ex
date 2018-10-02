@@ -5,6 +5,7 @@ defmodule PushSumGenServer do
     GenServer.start_link(__MODULE__, [nodeNo, neighboursList], name: {:via, Registry, {:node_store, nodeNo}})
   end
 
+  # Getting PID of a node by passing it's index
   def pidRetriever(nodeNo) do
     case Registry.lookup(:node_store, nodeNo) do
     [{pid, _}] -> pid
@@ -12,6 +13,7 @@ defmodule PushSumGenServer do
     end
   end
 
+  # Receives the first gossip for any node and kick starts the spreading and receiving processes of that node
   def init([nodeNo, neighboursList]) do
     # IO.puts("\nnodeNo: #{inspect(nodeNo)}   neighboursList:  #{inspect(neighboursList)}")
     receive do
@@ -22,6 +24,7 @@ defmodule PushSumGenServer do
     {:ok, nodeNo}
   end
 
+  # Receives the gossip, keeps track of the limit and sends message when it converges.
   def node(limit,s,w, rumoringProcess, oldRatio, nodeNo)  do
         # IO.puts("\ns: #{inspect(s)}   w:  #{inspect(w)}")
     {_, nodePid} = rumoringProcess
@@ -45,6 +48,7 @@ defmodule PushSumGenServer do
     end
   end
 
+  # Recursively spreads the gossip
   def spreadGossip(neighboursList, s, w, nodeNo) do
     # IO.puts("\nnodeNo: #{inspect(nodeNo)}   neighboursList:  #{inspect(neighboursList)}")
     try do
@@ -60,7 +64,7 @@ defmodule PushSumGenServer do
     rescue
       _ ->
         spreadGossip(neighboursList, s, w, nodeNo)
+    end
   end
-end
 
 end

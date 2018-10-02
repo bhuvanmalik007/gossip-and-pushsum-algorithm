@@ -8,7 +8,6 @@ defmodule GossipTopologies do
           i == numNodes -> [i - 1]
           true -> [i - 1, i + 1]
         end
-        # IO.puts "neighboursList: #{inspect(neighboursList)}"
         spawn(fn -> GossipGenServer.start_link(i, neighboursList) end)
     end
     HelperFunctions.convergeTopology(numNodes, "gossip")
@@ -32,7 +31,6 @@ defmodule GossipTopologies do
                               i == numNodes -> [i-1] ++ [Enum.random(Enum.filter(randomList, fn x -> x != i and x != (i-1) end))]
                               true -> [i-1,i+1] ++ [Enum.random(Enum.filter(randomList, fn x -> x != i and x != (i-1) and x != (i+1) end))]
       end
-      # IO.puts("\nneighbours of #{inspect(i)} are #{inspect(neighboursList)}")
       spawn(fn -> GossipGenServer.start_link(i, neighboursList) end)
     end
       HelperFunctions.convergeTopology(numNodes, "gossip")

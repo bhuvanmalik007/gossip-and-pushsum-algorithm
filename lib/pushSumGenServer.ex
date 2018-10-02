@@ -15,7 +15,6 @@ defmodule PushSumGenServer do
 
   # Receives the first gossip for any node and kick starts the spreading and receiving processes of that node
   def init([nodeNo, neighboursList]) do
-    # IO.puts("\nnodeNo: #{inspect(nodeNo)}   neighboursList:  #{inspect(neighboursList)}")
     receive do
       {_, s, w} ->
         rumoringProcess = Task.start fn -> spreadGossip(neighboursList,s + nodeNo, w + 1, nodeNo) end
@@ -26,12 +25,10 @@ defmodule PushSumGenServer do
 
   # Receives the gossip, keeps track of the limit and sends message when it converges.
   def node(limit,s,w, rumoringProcess, oldRatio, nodeNo)  do
-        # IO.puts("\ns: #{inspect(s)}   w:  #{inspect(w)}")
     {_, nodePid} = rumoringProcess
     newRatio = s/w
     delta = abs(newRatio - oldRatio)
     limit = if delta > :math.pow(10,-10), do: 0, else: limit + 1
-    # IO.puts("\nnodeNo: #{inspect(nodeNo)}   limit:  #{inspect(limit)}")
     if(limit >= 3) do
       Process.exit(nodePid, :kill)
       send(:global.whereis_name(:mainproc),{:converged, nodeNo})
@@ -50,7 +47,6 @@ defmodule PushSumGenServer do
 
   # Recursively spreads the gossip
   def spreadGossip(neighboursList, s, w, nodeNo) do
-    # IO.puts("\nnodeNo: #{inspect(nodeNo)}   neighboursList:  #{inspect(neighboursList)}")
     try do
       {s,w} = receive do
                   {:updatedGossip, newS, newW} -> {newS, newW}

@@ -15,10 +15,8 @@ defmodule GossipGenServer do
 
   # Receives the first gossip for any node and kick starts the spreading and receiving processes of that node
   def init([nodeNo, neighboursList]) do
-    # IO.puts("\nregistry keys: #{inspect(Registry.keys(:node_store, self()))}")
     receive do
       {_,rumorMessage} ->
-        # IO.puts("\nrumorMessageinit: #{inspect(rumorMessage)}")
         rumoringProcess = Task.start fn -> spreadGossip(neighboursList,rumorMessage, nodeNo) end
         GossipGenServer.node(1,rumorMessage,rumoringProcess, nodeNo)
     end

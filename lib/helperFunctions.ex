@@ -16,7 +16,7 @@ defmodule HelperFunctions do
             IO.puts "Node number #{inspect(nodeNo)} Converged"
             converging(numNodes-1)
       after
-              5000 -> IO.puts "Convergence could not be reached for #{numNodes} nodes"
+              30000 -> IO.puts "Convergence could not be reached for #{numNodes} nodes"
       end
     else
       nil
